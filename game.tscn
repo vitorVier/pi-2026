@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://b4y4bfk131tgd"]
+
+[ext_resource type="Script" uid="uid://oaxl3af4ltje" path="res://game.gd" id="1_feb5d"]
+
+[node name="Game" type="Node2D" unique_id=181581569]
+script = ExtResource("1_feb5d")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1824818593]
+position = Vector2(841, -124)
+
+[node name="Timer" type="Timer" parent="." unique_id=1642978833]
+wait_time = 3.5
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
