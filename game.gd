@@ -1,73 +1,197 @@
 extends Node2D
 
-var textures = [
-	# FRUTAS
-	preload("res://kenney_food-kit/Previews/apple.png"),
-	preload("res://kenney_food-kit/Previews/banana.png"),
-	preload("res://kenney_food-kit/Previews/cherries.png"),
-	preload("res://kenney_food-kit/Previews/orange.png"),
-	preload("res://kenney_food-kit/Previews/pineapple.png"),
-	preload("res://kenney_food-kit/Previews/strawberry.png"),
-	
-	# PETS
-	preload("res://kenney_pets/Previews/animal-cat.png"),
-	preload("res://kenney_pets/Previews/animal-chick.png"),
-	preload("res://kenney_pets/Previews/animal-elephant.png"),
-	preload("res://kenney_pets/Previews/animal-lion.png"),
-	preload("res://kenney_pets/Previews/animal-monkey.png"),
-	preload("res://kenney_pets/Previews/animal-panda.png"),
-	
-	# Tools
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_001.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_005.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_004.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_009.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_010.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_016.png"),
-	
-	# Eletronics
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_049.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_050.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_051.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_053.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_082.png"),
-	preload("res://kenney_tools/PNG/Colored/genericItem_color_084.png"),
-]
+enum Type {FRUIT, PET, TOOL, ELETRONIC}
 
+var state = "START"
+var points = 0
+var lifes = 5
+
+@onready var label_start = $LabelStart
+@onready var label_gameover = $LabelGameOver
+@onready var label_points = $LabelPoints
+@onready var label_life = $LabelLife
 @onready var item_scene = preload("res://Item.tscn")
 @onready var spawn_point = $Marker2D
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass
+# Mapeamento de inputs por tipo
+var input_map = {
+	Type.FRUIT: "rightHand",
+	Type.PET: "leftHand",
+	Type.TOOL: "rightFoot",
+	Type.ELETRONIC: "leftFoot"
+}
+
+# Agrupamento de assets por tipo
+var assets = {
+	Type.FRUIT: [
+		preload("res://kenney_food-kit/Previews/apple.png"),
+		preload("res://kenney_food-kit/Previews/banana.png"),
+		preload("res://kenney_food-kit/Previews/cherries.png"),
+		preload("res://kenney_food-kit/Previews/orange.png"),
+		preload("res://kenney_food-kit/Previews/pineapple.png"),
+		preload("res://kenney_food-kit/Previews/strawberry.png"),
+	],
+	Type.PET: [
+		preload("res://kenney_pets/Previews/animal-cat.png"),
+		preload("res://kenney_pets/Previews/animal-chick.png"),
+		preload("res://kenney_pets/Previews/animal-elephant.png"),
+		preload("res://kenney_pets/Previews/animal-lion.png"),
+		preload("res://kenney_pets/Previews/animal-monkey.png"),
+		preload("res://kenney_pets/Previews/animal-panda.png"),
+	],
+	Type.TOOL: [
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_001.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_005.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_004.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_009.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_010.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_016.png"),
+	],
+	Type.ELETRONIC: [
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_049.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_050.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_051.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_053.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_082.png"),
+		preload("res://kenney_tools/PNG/Colored/genericItem_color_084.png"),
+	]
+}
+
+func _ready():
+	go_to_start()
+	update_points()
+
+func _process(_delta):
+	if handle_state_transition():
+		return
+	if state == "PLAYING":
+		verify_input()
+
+func go_to_start():
+	state = "START"
+	points = 0
+	lifes = 5
+	
+	label_start.visible = true
+	label_points.visible = false
+	label_life.visible = false
+	label_gameover.visible = false
+	
+	update_points()
+	label_life.text = "Vidas: " + str(lifes)
+
+func go_to_playing():
+	state = "PLAYING"
+	label_start.visible = false
+	label_points.visible = true
+	label_life.visible = true
+
+func go_to_gameOver():
+	state = "GAMEOVER"
+	label_gameover.text = "GAME OVER\n\nPontuação final: " + str(points) + "\n\nAperta um botão para voltar ao inicio"
+	label_gameover.visible = true
+	label_points.visible = false
+	label_life.visible = false
+	
+	stop_items()
+	clear_items()
+	
+func stop_items():
+	for node in get_children():
+		if node is Area2D and "can_fall" in node:
+			node.can_fall = false
+
+func handle_state_transition():
+	for action in input_map.values():
+		if state == "START" and Input.is_action_just_pressed(action):
+			go_to_playing()
+			return true
+			
+		if state == "GAMEOVER" and Input.is_action_just_pressed(action):
+			go_to_start()
+			return true
+	return false
+
+func verify_input():
+	for action in input_map.values():
+		if Input.is_action_just_pressed(action):
+			process_direction(action)
+			return
+
+func process_direction(tecla):
+	var item = get_first_item()
+
+	if item == null:
+		print("Nenhum item na tela")
+		return
+
+	if acertou_tecla(item.type, tecla):
+		acertou(item)
+	else:
+		errou()
+
+func get_first_item():
+	for node in get_children():
+		if node is Area2D and node.has_method("get") and "type" in node:
+			return node
+	return null
+
+func acertou_tecla(type, tecla):
+	return input_map.get(type) == tecla
+
+# Aumenta pontuação ao acertar
+func acertou(item):
+	points += 10
+	item.queue_free()
+	update_points()
+
+# Reduz pontuação ao errar botão
+func errou():
+	lifes -= 1
+	if(lifes < 1):
+		go_to_gameOver()
+	$LabelLife.text = "Vidas: " + str(lifes)
+
+# Atualiza pontuação
+func update_points():
+	label_points.text = "Pontos: " + str(points)
 
 func _on_timer_timeout():
-	spawn_item()
+	if state == "PLAYING":
+		spawn_item()
 
+# Função para spawnar itens aleatoriamente
 func spawn_item():
 	var new_item = item_scene.instantiate()
-	var random_texture = textures[randi() % textures.size()]
+	var type = randi() % Type.size()
 
-	# Acessa o Sprite2D dentro do novo item e muda a imagem
-	new_item.get_node("Sprite2D").texture = random_texture
-	
-	new_item.scale = calculate_scale(random_texture.resource_path)
+	var texture = get_random_texture(type)
+
+	new_item.get_node("Sprite2D").texture = texture
+	new_item.scale = calculate_scale(texture.resource_path)
 	new_item.position = spawn_point.position
-	
+	new_item.type = type
+
 	add_child(new_item)
 
-# Função auxiliar para redimencionar escala das imagens
+# Limpa todos items da tela
+func clear_items():
+	for node in get_children():
+		if node is Area2D:
+			node.queue_free()
+
+func get_random_texture(type):
+	var list = assets[type]
+	return list[randi() % list.size()]
+
+# Função auxiliar para calcular tamanho dos itens
 func calculate_scale(path: String) -> Vector2:
 	var path_lower = path.to_lower()
-	
-	if "food-kit" in path_lower or "pets" in path_lower:
-		return Vector2(2.5, 2.5) # Frutas e animais maiores (Ajuste o 5 conforme necessário)
-	
-	if "tools" in path_lower:
-		return Vector2(1, 1) # Ferramentas e eletrônicos no tamanho original
-		
-	return Vector2(1, 1) # Escala padrão caso não caia em nenhuma regra
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	if "food-kit" in path_lower or "pets" in path_lower:
+		return Vector2(2.5, 2.5)
+
+	if "tools" in path_lower:
+		return Vector2(1, 1)
+
+	return Vector2(1, 1)

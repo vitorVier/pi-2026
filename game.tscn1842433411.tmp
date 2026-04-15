@@ -6,15 +6,6 @@
 font_size = 80
 font_color = Color(0, 0.91764706, 0, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_feb5d"]
-font_size = 50
-
-[sub_resource type="LabelSettings" id="LabelSettings_e2o6t"]
-font_size = 80
-
-[sub_resource type="LabelSettings" id="LabelSettings_fc0e3"]
-font_size = 50
-
 [node name="Game" type="Node2D" unique_id=181581569]
 script = ExtResource("1_feb5d")
 
@@ -39,31 +30,8 @@ label_settings = SubResource("LabelSettings_80nbo")
 uppercase = true
 
 [node name="LabelPoints" type="Label" parent="." unique_id=2131246689]
-offset_left = 1639.0
-offset_top = 37.0
-offset_right = 1862.0
-offset_bottom = 106.0
+offset_right = 40.0
+offset_bottom = 23.0
 text = "Pontos: 0"
-label_settings = SubResource("LabelSettings_feb5d")
-
-[node name="LabelGameOver" type="Label" parent="." unique_id=502822869]
-offset_left = 261.0
-offset_top = 185.0
-offset_right = 901.0
-offset_bottom = 521.0
-text = "GAME OVER
-
-Pontuação Final:"
-label_settings = SubResource("LabelSettings_e2o6t")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LabelLife" type="Label" parent="." unique_id=1693570709]
-offset_left = 1678.0
-offset_top = 108.0
-offset_right = 1863.0
-offset_bottom = 177.0
-text = "Vidas: 5"
-label_settings = SubResource("LabelSettings_fc0e3")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -47,10 +47,10 @@ text = "Pontos: 0"
 label_settings = SubResource("LabelSettings_feb5d")
 
 [node name="LabelGameOver" type="Label" parent="." unique_id=502822869]
-offset_left = 261.0
-offset_top = 185.0
-offset_right = 901.0
-offset_bottom = 521.0
+offset_left = 635.0
+offset_top = 315.0
+offset_right = 1275.0
+offset_bottom = 651.0
 text = "GAME OVER
 
 Pontuação Final:"
