@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://b4y4bfk131tgd"]
+
+[ext_resource type="Script" uid="uid://oaxl3af4ltje" path="res://game.gd" id="1_feb5d"]
+[ext_resource type="VideoStream" uid="uid://c3hj6gdl40hhx" path="res://background_images/esteiraaa.ogv" id="2_e2o6t"]
+[ext_resource type="Shader" uid="uid://bi86sb1re40um" path="res://game.gdshader" id="2_feb5d"]
+[ext_resource type="Texture2D" uid="uid://du5f850fa3rgi" path="res://background_images/bancada-pets.png" id="4_eow3j"]
+[ext_resource type="Texture2D" uid="uid://wqbc5dc32w8m" path="res://background_images/bancada_frutas.png" id="5_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://coe7cl0vu8hyl" path="res://background_images/bancada-eletronicos.png" id="6_vef74"]
+[ext_resource type="Texture2D" uid="uid://xl7ic2nseta1" path="res://background_images/bancada-roupas.png" id="7_hve3p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fc0e3"]
+shader = ExtResource("2_feb5d")
+
+[sub_resource type="LabelSettings" id="LabelSettings_80nbo"]
+font_size = 80
+font_color = Color(0, 0.91764706, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_e2o6t"]
+font_size = 80
+
+[sub_resource type="LabelSettings" id="LabelSettings_7jktm"]
+font_size = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_feb5d"]
+font_size = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_fc0e3"]
+font_size = 50
+
+[node name="Game" type="Node2D" unique_id=181581569]
+script = ExtResource("1_feb5d")
+
+[node name="Background" type="Node2D" parent="." unique_id=452693259]
+
+[node name="Conveyor" type="VideoStreamPlayer" parent="Background" unique_id=122907284]
+modulate = Color(0.007843138, 0.007843138, 0.007843138, 1)
+material = SubResource("ShaderMaterial_fc0e3")
+offset_left = 650.0
+offset_top = -81.0
+offset_right = 1370.0
+offset_bottom = 1199.0
+scale = Vector2(0.85, 0.85)
+stream = ExtResource("2_e2o6t")
+volume_db = -80.0
+speed_scale = 0.907
+autoplay = true
+loop = true
+
+[node name="ColorRect" type="ColorRect" parent="Background" unique_id=1068810162]
+z_index = 1
+offset_left = -24.0
+offset_top = -44.0
+offset_right = 1981.0
+offset_bottom = 1023.0
+color = Color(0, 0, 0, 0.2)
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1824818593]
+position = Vector2(953, -124)
+
+[node name="Timer" type="Timer" parent="." unique_id=1642978833]
+wait_time = 3.5
+autostart = true
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1083695111]
+modulate = Color(0, 0, 0, 0.49411765)
+offset_left = -36.0
+offset_top = -233.0
+offset_right = 1977.0
+offset_bottom = 92.0
+
+[node name="LabelStart" type="Label" parent="." unique_id=2099077984]
+offset_left = 73.0
+offset_top = 429.0
+offset_right = 1838.0
+offset_bottom = 539.0
+text = "Aperte qualquer botão para  começar..."
+label_settings = SubResource("LabelSettings_80nbo")
+uppercase = true
+
+[node name="LabelGameOver" type="Label" parent="." unique_id=502822869]
+offset_left = 243.0
+offset_top = 183.0
+offset_right = 883.0
+offset_bottom = 519.0
+text = "GAME OVER
+
+Pontuação Final:"
+label_settings = SubResource("LabelSettings_e2o6t")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelLevel" type="Label" parent="." unique_id=1249913323]
+offset_left = 380.0
+offset_top = 13.0
+offset_right = 532.0
+offset_bottom = 82.0
+text = "Level: "
+label_settings = SubResource("LabelSettings_7jktm")
+
+[node name="LabelPoints" type="Label" parent="." unique_id=2131246689]
+offset_left = 900.0
+offset_top = 12.0
+offset_right = 1144.0
+offset_bottom = 81.0
+text = "⭐ 0"
+label_settings = SubResource("LabelSettings_feb5d")
+vertical_alignment = 1
+
+[node name="LabelLife" type="Label" parent="." unique_id=1693570709]
+offset_left = 1292.0
+offset_top = 9.5
+offset_right = 1447.0
+offset_bottom = 78.5
+text = "❤️ 5"
+label_settings = SubResource("LabelSettings_fc0e3")
+
+[node name="Interfaces" type="CanvasLayer" parent="." unique_id=720081447]
+
+[node name="Control" type="Control" parent="Interfaces" unique_id=1739139507]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TopLeft_Pets" type="TextureRect" parent="Interfaces/Control" unique_id=1055506627]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 89.0
+offset_right = 575.0
+offset_bottom = 483.0
+texture = ExtResource("4_eow3j")
+expand_mode = 1
+
+[node name="TopRight_Fruits" type="TextureRect" parent="Interfaces/Control" unique_id=2089507131]
+layout_mode = 0
+offset_left = 1331.0
+offset_top = 76.0
+offset_right = 1890.0
+offset_bottom = 470.0
+texture = ExtResource("5_j5wjh")
+expand_mode = 1
+
+[node name="BottomLeft_Eletronics" type="TextureRect" parent="Interfaces/Control" unique_id=502668562]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 628.0
+offset_right = 527.0
+offset_bottom = 997.0
+texture = ExtResource("6_vef74")
+expand_mode = 1
+
+[node name="BottomRight_Clothes" type="TextureRect" parent="Interfaces/Control" unique_id=182073663]
+layout_mode = 0
+offset_left = 1304.0
+offset_top = 615.0
+offset_right = 1886.0
+offset_bottom = 1007.0
+texture = ExtResource("7_hve3p")
+expand_mode = 1
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

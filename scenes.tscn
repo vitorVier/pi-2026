@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cnlelng8713wn"]
+
+[ext_resource type="PackedScene" uid="uid://cu5p418ipemfe" path="res://main_menu.tscn" id="1_552j8"]
+[ext_resource type="PackedScene" uid="uid://cvsgsi6vq4eqr" path="res://how_to_play.tscn" id="2_f3u8r"]
+[ext_resource type="PackedScene" uid="uid://b4y4bfk131tgd" path="res://game.tscn" id="4_0mr60"]
+
+[node name="Scenes" type="Node2D" unique_id=433641312]
+
+[node name="Menu" parent="." unique_id=1878127829 instance=ExtResource("1_552j8")]
+
+[node name="Game" parent="." unique_id=181581569 instance=ExtResource("4_0mr60")]
+
+[node name="HowToPlay" parent="." unique_id=256030691 instance=ExtResource("2_f3u8r")]
