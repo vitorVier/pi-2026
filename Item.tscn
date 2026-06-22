@@ -10,6 +10,10 @@ z_index = 2
 position = Vector2(539, -50)
 script = ExtResource("1_bp1wp")
 
+[node name="ShadowSprite" type="Sprite2D" parent="." unique_id=1434311320]
+
+[node name="BorderSprite" type="Sprite2D" parent="." unique_id=323414836]
+
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=882822938]
 metadata/_edit_lock_ = true
 

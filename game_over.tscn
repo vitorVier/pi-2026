@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://b8lmewiydf0ph" path="res://sounds/gameover_claps.mp3" id="3_ccer4"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_yxx3c"]
-line_spacing = 2.0
+line_spacing = 1.5
 font_size = 70
 font_color = Color(0.16078432, 0.08235294, 0.011764706, 1)
 
@@ -16,10 +16,10 @@ script = ExtResource("1_ccer4")
 
 [node name="LabelGameOver" type="Label" parent="CanvasLayer" unique_id=1140163089]
 z_index = 2
-offset_left = 640.0
-offset_top = 445.0
-offset_right = 1288.0
-offset_bottom = 598.0
+offset_left = 600.0
+offset_top = 465.0
+offset_right = 1248.0
+offset_bottom = 618.0
 text = "Pontuação final: "
 label_settings = SubResource("LabelSettings_yxx3c")
 horizontal_alignment = 1
@@ -29,9 +29,9 @@ vertical_alignment = 1
 z_index = -1
 anchors_preset = -1
 anchor_left = -0.07052632
-anchor_top = -0.061
+anchor_top = -0.060999997
 anchor_right = -0.07052632
-anchor_bottom = -0.061
+anchor_bottom = -0.021296296
 offset_left = 110.0
 offset_top = 45.0
 offset_right = 2055.0
